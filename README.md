@@ -1,46 +1,72 @@
-# CodeProbe v2 — transparent browser kit
+# CodeProbe v2 — transparent browser kit for course project folders
 
-CodeProbe v2 is a browser-based heuristic static analysis workbench for source code and technical Markdown. It runs entirely on the client side through Pyodide, keeps the Python engine readable as a separate file and avoids the Base64-packed single-file delivery model that often triggers antivirus heuristics.
+CodeProbe v2 is a browser-based heuristic static analysis workbench for source code and technical Markdown. It runs locally in the browser through Pyodide, keeps the analysis engine readable as a separate `engine.py` file and avoids the Base64-packed single-file pattern that often triggers antivirus heuristics.
 
-This repository contains the transparent edition prepared for local use, GitHub publication and static hosting.
+This edition is suitable for GitHub publication, local teaching use and inclusion as a separate folder inside project kits for taught modules.
 
-## What this kit provides
+The interface also includes a visible **Course use policy** panel so that the formative status of the score and the **60%** review threshold remain in view during self-assessment.
 
-CodeProbe combines a dark-theme browser interface with a registry-based Python analysis engine. The current kit supports Python, JavaScript, Bash, C, C++, C# and Markdown. It produces a summary view, per-metric detail, a plain-text report, a JSON report and a small local history in the browser.
+## What this kit is for
 
-The analysis is heuristic by design. It is useful for teaching, exploratory quality assessment and comparative inspection of code samples. It is not a compiler, a security scanner or a proof of authorship.
+This kit is intended to help students review code quality, stylistic regularity and possible signs of over-reliance on LLM or generative-AI output. It is designed for **formative self-assessment**.
 
-## Why this transparent edition exists
+The reported score is a **heuristic signal**. It is **not proof of misconduct** and should not be used as the sole basis for academic sanctions. Where concerns remain, the report should be read together with version history, intermediate commits, design notes and an oral code walkthrough.
 
-The original single-file packaging model embedded the Python engine inside HTML as a large Base64 payload and reconstructed it at run time. That design is portable, but it resembles delivery patterns used by HTML smuggling and other browser-side payload loaders. Some antivirus products therefore flag it even when the code itself is benign.
+## Recommended academic use model
 
-This edition removes that packaging pattern. The browser now loads a plain `engine.py` file directly. That change improves inspectability and usually reduces false-positive malware detections.
+If you want to use this kit in other course projects, the most defensible policy is:
 
-## Key features
+- students run the tool locally on the code they authored for the project
+- starter code, third-party libraries, generated files, minified assets and documentation are excluded
+- a result above **60%** triggers revision and a short disclosure, not an automatic penalty
+- final judgement, where needed, is based on the report together with Git history, project notes and the student's ability to explain the code
 
-- Local-first analysis in the browser through Pyodide
-- Readable Python engine in `engine.py`
-- No Base64-packed analysis engine
-- Support for Python, JavaScript, Bash, C, C++, C# and Markdown
-- Core stylistic and structural metrics across languages
-- Low-level quality metrics for C, C++ and partly C#
-- Reduced prose-aware metric set for Markdown
-- JSON and text export
-- Local report history stored in browser storage only
-- Drag-and-drop file loading, syntax highlighting and language auto-detection
+### Suggested interpretation bands
+
+| Reported suspicion score | Recommended reading | Expected action |
+|---|---|---|
+| 0–50% | Low concern | Proceed normally |
+| >50–60% | Borderline | Review structure, naming, comments and repetition, then re-run |
+| >60–75% | Elevated | Revise the code, re-run the tool and attach a short disclosure if the module requires it |
+| >75% | High | Manual review with Git history and a short oral walkthrough |
+
+A simple course rule is therefore: **aim to stay below 60% on code you authored yourself**.
+
+## What students should and should not analyse
+
+### Include
+
+- source files authored by the student
+- implementation files written specifically for the assessed task
+- language files supported by the tool: Python, JavaScript, Bash, C, C++, C# and Markdown
+
+### Exclude
+
+- starter code supplied by the lecturer
+- third-party libraries and copied utility code
+- generated files and build artefacts
+- minified or transpiled assets
+- documentation files when the assessment concerns code rather than prose
+- whole repositories if only part of the repository is the student's own work
+
+Use the bundled `.codeprobeignore.example` as a manual guide when preparing a check.
 
 ## Repository layout
 
 ```text
 .
-├── index.html
-├── engine.py
-├── run_local_server.py
+├── .codeprobeignore.example
+├── COURSE_INTEGRATION.md
+├── PROJECT_KIT_NOTICE.md
 ├── README.md
-└── README.txt
+├── README.txt
+├── STUDENT_DISCLOSURE_TEMPLATE.md
+├── engine.py
+├── index.html
+└── run_local_server.py
 ```
 
-## Requirements
+## System requirements
 
 | Component | Requirement |
 |---|---|
@@ -50,138 +76,199 @@ This edition removes that packaging pattern. The browser now loads a plain `engi
 
 No build step is required.
 
-## Quick start
+## Step-by-step setup and launch
 
-### Recommended launch
+### Windows
 
-Keep `index.html` and `engine.py` in the same directory, then run:
+1. Download or clone the kit and extract it if it arrived as a ZIP archive.
+2. Keep `index.html` and `engine.py` in the same folder.
+3. Open **PowerShell** or **Command Prompt** in that folder.
+4. Start the local helper server with one of the commands below:
 
-```bash
-python run_local_server.py
-```
+   ```powershell
+   py -3 run_local_server.py
+   ```
 
-Open the address printed in the terminal. The helper server binds to `127.0.0.1` on a free local port.
+   or, if `py` is not available:
 
-### Direct opening from the file system
+   ```powershell
+   python run_local_server.py
+   ```
 
-You can also open `index.html` directly. Some browsers block relative file loading for local files. If that happens, use the **Load engine file** button and select `engine.py` manually.
+5. Wait for the script to print a local address such as `http://127.0.0.1:8123/index.html`.
+6. Open that address in your browser. The script usually tries to open it automatically.
+7. Keep the terminal window open while you use the tool.
+8. Press `Ctrl+C` in the terminal when you want to stop the server.
 
-### GitHub and GitHub Pages
+### Linux
 
-For a normal repository, place `README.md` at the repository root together with `index.html` and `engine.py`.
+1. Download or clone the kit.
+2. Open a terminal in the kit directory.
+3. Confirm that Python 3 is available:
 
-For GitHub Pages, keep `index.html` and `engine.py` in the published directory. Because the engine is fetched as a normal file over HTTP, the helper server is not needed once the site is hosted.
+   ```bash
+   python3 --version
+   ```
+
+4. Start the local helper server:
+
+   ```bash
+   python3 run_local_server.py
+   ```
+
+5. Open the local address printed in the terminal.
+6. Keep the terminal window open during use.
+7. Stop the server with `Ctrl+C` when finished.
+
+### macOS
+
+1. Download or clone the kit and place it in a folder you can access easily.
+2. Open **Terminal**.
+3. Move into the kit directory, for example:
+
+   ```bash
+   cd /path/to/codeprobe_browser_v2_course_kit
+   ```
+
+4. Check that Python 3 is present:
+
+   ```bash
+   python3 --version
+   ```
+
+5. Start the local helper server:
+
+   ```bash
+   python3 run_local_server.py
+   ```
+
+6. Open the printed local address in your browser.
+7. Leave Terminal open while the page is in use.
+8. Stop the server with `Ctrl+C` when you are done.
+
+## Direct opening without a local server
+
+You can also open `index.html` directly from the file system. Some browsers block relative file loading for local files. If that happens:
+
+1. open `index.html`
+2. wait for the page to show the **Load engine file** button
+3. click **Load engine file**
+4. select the bundled `engine.py`
+5. continue normally
+
+The local server remains the more reliable method.
+
+## Step-by-step analysis workflow
+
+1. Start the kit with the local server or open `index.html` directly.
+2. Paste code into the editor, drag a file onto the editor or click **Open file**.
+3. Load only the files the student actually authored.
+4. Leave **Language** on **Auto** or select the language explicitly.
+5. Click **Analyse**.
+6. Read the **Overall score**, **Verdict** and, where applicable, **Low-Level Quality**.
+7. Inspect the detailed metrics, warnings and notes.
+8. If the result is above **60%**, revise the code and run the analysis again.
+9. Export the text or JSON report if the module requires a record.
+10. If your course policy asks for disclosure, complete `STUDENT_DISCLOSURE_TEMPLATE.md` and submit it with the project.
 
 ## Supported languages
 
-| Language | Extensions | Detection signals | Notes |
-|---|---|---|---|
-| Python | `.py`, `.pyw` | extension, shebang, syntax cues | Uses `ast` where suitable |
-| JavaScript | `.js`, `.mjs`, `.cjs`, `.jsx`, `.ts`, `.tsx` | extension, shebang, syntax cues | Includes modern syntax checks |
-| Bash | `.sh`, `.bash`, `.zsh`, `.ksh` | extension, shebang, shell syntax | Includes quoting consistency checks |
-| C | `.c`, `.h` | extension, preprocessor and brace cues | Includes low-level quality metrics |
-| C++ | `.cpp`, `.cxx`, `.cc`, `.hpp`, `.hxx`, `.hh` | extension, templates, namespaces and brace cues | Includes low-level quality metrics |
-| C# | `.cs` | extension, `using`, attributes and brace cues | Includes transferable low-level metrics |
-| Markdown | `.md`, `.markdown` | extension, heading and fence cues | Uses a reduced prose-oriented metric set |
+| Language | Extensions | Notes |
+|---|---|---|
+| Python | `.py`, `.pyw` | Uses `ast` where suitable |
+| JavaScript | `.js`, `.mjs`, `.cjs`, `.jsx`, `.ts`, `.tsx` | Includes modern syntax cues |
+| Bash | `.sh`, `.bash`, `.zsh`, `.ksh` | Includes shell-specific heuristics |
+| C | `.c`, `.h` | Includes low-level quality metrics |
+| C++ | `.cpp`, `.cxx`, `.cc`, `.hpp`, `.hxx`, `.hh` | Includes low-level quality metrics |
+| C# | `.cs` | Includes transferable low-level metrics |
+| Markdown | `.md`, `.markdown` | Uses a reduced prose-aware metric set |
 
-## Metric coverage
+## Included companion documents
 
-The engine currently provides more than thirty metrics organised into four broad groups.
+### `COURSE_INTEGRATION.md`
 
-### 1. Cross-language code metrics
+Instructor-facing guidance for inserting the kit into another module, including a suggested policy statement, threshold bands and a recommended evidence model.
 
-These include line-length uniformity, blank-line regularity, lexical entropy, identifier style, function length, cyclomatic complexity, Halstead difficulty, magic-number density, nesting depth, defensive programming, indentation consistency, structural self-similarity and related measures.
+### `PROJECT_KIT_NOTICE.md`
 
-### 2. Language-specific metrics
+A short ready-to-paste notice for a project README, assignment brief or repository front page.
 
-These include Python docstring coverage, Python type-hint coverage, JavaScript modern syntax, Bash variable-quoting consistency and import organisation.
+### `STUDENT_DISCLOSURE_TEMPLATE.md`
 
-### 3. Low-level quality metrics
+A student template for declaring any AI assistance used during development, what was retained, what was rewritten and how correctness was validated.
 
-For C and C++ the engine adds:
+### `.codeprobeignore.example`
 
-- register pressure estimation
-- stack frame depth estimation
-- redundant memory access patterns
-- code elegance composite
-- preprocessor hygiene
+A manual checklist of folders and file patterns that should usually be excluded from a self-check.
 
-For C# the transferable subset is enabled where the heuristics remain meaningful.
+## Embedding this kit inside another project repository
 
-### 4. Markdown metrics
+A practical layout is:
 
-Markdown analysis uses a narrower set:
+```text
+course-project/
+├── codeprobe/
+│   ├── index.html
+│   ├── engine.py
+│   ├── run_local_server.py
+│   ├── README.md
+│   ├── COURSE_INTEGRATION.md
+│   ├── PROJECT_KIT_NOTICE.md
+│   ├── STUDENT_DISCLOSURE_TEMPLATE.md
+│   └── .codeprobeignore.example
+├── src/
+├── docs/
+└── README.md
+```
 
-- heading-structure regularity
-- code-fence density
-- link density
-- prose entropy
+Recommended practice:
 
-Comment-to-code ratio is intentionally not applied to Markdown.
-
-## What the interface shows
-
-The right-hand analysis panel contains four result views and one local history view.
-
-| Panel | Purpose |
-|---|---|
-| Summary | High-level verdict, aggregate score, warnings and references |
-| Metrics | Per-metric values, scores, explanations and notes |
-| Text report | Human-readable narrative report |
-| JSON | Machine-readable report payload |
-| History | Recent local analyses stored in browser storage |
-
-For C, C++ and C# an additional **Low-Level Quality** summary card is shown.
+1. keep the CodeProbe kit in its own `codeprobe/` folder
+2. link to that folder from the root project README
+3. tell students to analyse only their authored source files
+4. ask for revision rather than punishment when the score exceeds the local threshold
+5. use Git history and oral explanation if a manual review becomes necessary
 
 ## Privacy and data handling
 
-CodeProbe analyses source text in the browser. The code being inspected is not uploaded by this kit to a remote service. The application stores only a short local history in browser storage so that recent reports can be reopened.
+CodeProbe analyses source text locally in the browser. The code being inspected is not uploaded by this kit to a remote service. The application stores only a short local history in browser storage so that recent reports can be reopened.
 
 The only required network dependency is the Pyodide runtime loaded from the official CDN.
 
-## Interpretation and limitations
+## Limitations
 
-- The engine is heuristic. It estimates patterns from source text and does not replace a compiler, a profiler or a formal static analyser.
-- C, C++ and C# low-level metrics are source-level approximations. They do not observe actual register allocation, generated stack frames or emitted assembly.
-- Markdown analysis is intentionally narrower than code analysis.
-- The verdict layer should be read as a probabilistic signal about stylistic regularity and scaffold-like structure, not as evidence of misconduct.
-- Small files, generated boilerplate and highly stylised teaching examples can distort metric values.
+- The engine is heuristic and source-based.
+- It is not a compiler, profiler, linter or formal authorship proof system.
+- Low-level metrics for C, C++ and C# are approximations based on source patterns.
+- Small files, generated boilerplate and strongly templated assignments can distort results.
+- A low score does not prove independent work and a high score does not prove misconduct.
 
-## Typical workflow
+## Suggested short policy text for a module handbook
 
-1. Open the interface.
-2. Paste code, drop a file or load a source file from disk.
-3. Leave language on **Auto** or select a language explicitly.
-4. Choose a scoring profile if needed.
-5. Run **Analyse**.
-6. Inspect the summary card, detailed metrics and exported report.
+> Students must run the bundled CodeProbe kit locally on the code they authored for the project before submission. The reported AI-assistance suspicion score is a formative signal, not proof of misconduct. A result above 60% requires code revision and, where requested, a short disclosure describing any AI assistance, what was retained, what was rewritten and how correctness was validated. Final academic judgement, where needed, will be based on the CodeProbe report together with repository history, intermediate commits, design notes and an oral code walkthrough. Starter code, third-party libraries, generated files, minified assets and documentation must be excluded from the check.
 
-## Development notes
+## Selected academic background
 
-The project keeps the existing browser architecture intact:
+### Teaching, integrity and policy
 
-- `index.html` contains the interface and application logic
-- `engine.py` contains the registry-based Python engine
-- Pyodide runs the engine in the browser
-- exports are generated locally in the client
+| APA 7 reference | DOI |
+|---|---|
+| Dalalah, D., & Dalalah, O. M. A. (2023). The false positives and false negatives of generative AI detection tools in education and academic research: The case of ChatGPT. *The International Journal of Management Education, 21*(2), 100822. | https://doi.org/10.1016/j.ijme.2023.100822 |
+| Ibrahim, K. (2023). Using AI-based detectors to control AI-assisted plagiarism in ESL writing: “The Terminator Versus the Machines”. *Language Testing in Asia, 13*, 46. | https://doi.org/10.1186/s40468-023-00260-2 |
+| Nicol, D. J., & Macfarlane-Dick, D. (2006). Formative assessment and self-regulated learning: A model and seven principles of good feedback practice. *Studies in Higher Education, 31*(2), 199–218. | https://doi.org/10.1080/03075070600572090 |
+| Wang, H., Dang, A., Wu, Z., & Mac, S. (2024). Generative AI in higher education: Seeing ChatGPT through universities’ policies, resources and guidelines. *Computers & Education: Artificial Intelligence, 7*, 100326. | https://doi.org/10.1016/j.caeai.2024.100326 |
 
-This makes the package easy to audit and easy to adapt for teaching or demonstration purposes.
+### Code stylometry and technical background
 
-## Suggested repository extras
+| APA 7 reference | DOI |
+|---|---|
+| Balla, S., Gabbrielli, M., & Zacchiroli, S. (2024). Code stylometry vs formatting and minification. *PeerJ Computer Science, 10*, e2142. | https://doi.org/10.7717/peerj-cs.2142 |
+| Buse, R. P. L., & Weimer, W. R. (2008). A metric for software readability. In *Proceedings of the 2008 International Symposium on Software Testing and Analysis* (pp. 121–130). | https://doi.org/10.1145/1390630.1390647 |
+| Chaitin, G. J. (1982). Register allocation and spilling via graph coloring. *ACM SIGPLAN Notices, 17*(6), 98–105. | https://doi.org/10.1145/872726.806984 |
+| Krsul, I., & Spafford, E. H. (1997). Authorship analysis: identifying the author of a program. *Computers & Security, 16*(3), 233–257. | https://doi.org/10.1016/S0167-4048(97)00005-9 |
+| McCabe, T. J. (1976). A complexity measure. *IEEE Transactions on Software Engineering, SE-2*(4), 308–320. | https://doi.org/10.1109/TSE.1976.233837 |
+| Poletto, M., & Sarkar, V. (1999). Linear scan register allocation. *ACM Transactions on Programming Languages and Systems, 21*(5), 895–913. | https://doi.org/10.1145/330249.330250 |
 
-For a public GitHub repository, it is sensible to add the following files if you want a more polished project page:
+## Licence and maintenance
 
-- `LICENSE`
-- `CHANGELOG.md`
-- `CONTRIBUTING.md`
-- a screenshot placed in `docs/` or `assets/`
-
-## Selected references
-
-Buse, R. P. L., & Weimer, W. R. (2008). *A metric for software readability*. Proceedings of the 2008 International Symposium on Software Testing and Analysis, 121–130. https://doi.org/10.1145/1390630.1390647
-
-Chaitin, G. J. (1982). *Register allocation and spilling via graph coloring*. ACM SIGPLAN Notices, 17(6), 98–105. https://doi.org/10.1145/872726.806984
-
-McCabe, T. J. (1976). *A complexity measure*. IEEE Transactions on Software Engineering, SE-2(4), 308–320. https://doi.org/10.1109/TSE.1976.233837
-
-Poletto, M., & Sarkar, V. (1999). *Linear scan register allocation*. ACM Transactions on Programming Languages and Systems, 21(5), 895–913. https://doi.org/10.1145/330249.330250
+No licence file is bundled by default in this package. If you publish the kit on GitHub, add a licence that matches your intended use and institution policy.
