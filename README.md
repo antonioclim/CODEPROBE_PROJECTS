@@ -1,20 +1,41 @@
-# CodeProbe v2 — transparent browser kit for course project folders
+# CodeProbe v2 — transparent browser kit for course projects
+
+![CodeProbe interface preview](docs/codeprobe-interface-preview.png)
 
 CodeProbe v2 is a browser-based heuristic static analysis workbench for source code and technical Markdown. It runs locally in the browser through Pyodide, keeps the analysis engine readable as a separate `engine.py` file and avoids the Base64-packed single-file pattern that often triggers antivirus heuristics.
 
-This edition is suitable for GitHub publication, local teaching use and inclusion as a separate folder inside project kits for taught modules.
+This repository edition is structured for public GitHub use. The application lives in `src/`, documentation and media live in `docs/` and the course-facing policy and disclosure material remain in the repository root.
 
-The interface also includes a visible **Course use policy** panel so that the formative status of the score and the **60%** review threshold remain in view during self-assessment.
+## What this repository is for
 
-## What this kit is for
-
-This kit is intended to help students review code quality, stylistic regularity and possible signs of over-reliance on LLM or generative-AI output. It is designed for **formative self-assessment**.
+This kit helps students review code quality, stylistic regularity and possible signs of over-reliance on LLM or generative-AI output. It is designed for **formative self-assessment**.
 
 The reported score is a **heuristic signal**. It is **not proof of misconduct** and should not be used as the sole basis for academic sanctions. Where concerns remain, the report should be read together with version history, intermediate commits, design notes and an oral code walkthrough.
 
-## Recommended academic use model
+## Repository layout
 
-If you want to use this kit in other course projects, the most defensible policy is:
+```text
+.
+├── .codeprobeignore.example
+├── .gitignore
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── COURSE_INTEGRATION.md
+├── LICENSE
+├── PROJECT_KIT_NOTICE.md
+├── README.md
+├── STUDENT_DISCLOSURE_TEMPLATE.md
+├── docs/
+│   └── codeprobe-interface-preview.png
+└── src/
+    ├── engine.py
+    ├── index.html
+    └── run_local_server.py
+```
+
+## Course use policy in one page
+
+A defensible use model for taught modules is:
 
 - students run the tool locally on the code they authored for the project
 - starter code, third-party libraries, generated files, minified assets and documentation are excluded
@@ -30,41 +51,7 @@ If you want to use this kit in other course projects, the most defensible policy
 | >60–75% | Elevated | Revise the code, re-run the tool and attach a short disclosure if the module requires it |
 | >75% | High | Manual review with Git history and a short oral walkthrough |
 
-A simple course rule is therefore: **aim to stay below 60% on code you authored yourself**.
-
-## What students should and should not analyse
-
-### Include
-
-- source files authored by the student
-- implementation files written specifically for the assessed task
-- language files supported by the tool: Python, JavaScript, Bash, C, C++, C# and Markdown
-
-### Exclude
-
-- starter code supplied by the lecturer
-- third-party libraries and copied utility code
-- generated files and build artefacts
-- minified or transpiled assets
-- documentation files when the assessment concerns code rather than prose
-- whole repositories if only part of the repository is the student's own work
-
-Use the bundled `.codeprobeignore.example` as a manual guide when preparing a check.
-
-## Repository layout
-
-```text
-.
-├── .codeprobeignore.example
-├── COURSE_INTEGRATION.md
-├── PROJECT_KIT_NOTICE.md
-├── README.md
-├── README.txt
-├── STUDENT_DISCLOSURE_TEMPLATE.md
-├── engine.py
-├── index.html
-└── run_local_server.py
-```
+A practical rule for students is therefore: **aim to stay below 60% on code you authored yourself**.
 
 ## System requirements
 
@@ -72,7 +59,7 @@ Use the bundled `.codeprobeignore.example` as a manual guide when preparing a ch
 |---|---|
 | Browser | A modern Chromium, Firefox or Safari-class browser |
 | Network | Internet access to load Pyodide from the official CDN |
-| Python | Optional, only if you want to use `run_local_server.py` |
+| Python | Optional, only if you want to use `src/run_local_server.py` |
 
 No build step is required.
 
@@ -80,19 +67,19 @@ No build step is required.
 
 ### Windows
 
-1. Download or clone the kit and extract it if it arrived as a ZIP archive.
-2. Keep `index.html` and `engine.py` in the same folder.
-3. Open **PowerShell** or **Command Prompt** in that folder.
+1. Download or clone the repository and extract it if it arrived as a ZIP archive.
+2. Keep the files in `src/` together. `index.html` expects `engine.py` to be beside it.
+3. Open **PowerShell** or **Command Prompt** in the repository root.
 4. Start the local helper server with one of the commands below:
 
    ```powershell
-   py -3 run_local_server.py
+   py -3 src/run_local_server.py
    ```
 
    or, if `py` is not available:
 
    ```powershell
-   python run_local_server.py
+   python src/run_local_server.py
    ```
 
 5. Wait for the script to print a local address such as `http://127.0.0.1:8123/index.html`.
@@ -102,8 +89,8 @@ No build step is required.
 
 ### Linux
 
-1. Download or clone the kit.
-2. Open a terminal in the kit directory.
+1. Download or clone the repository.
+2. Open a terminal in the repository root.
 3. Confirm that Python 3 is available:
 
    ```bash
@@ -113,7 +100,7 @@ No build step is required.
 4. Start the local helper server:
 
    ```bash
-   python3 run_local_server.py
+   python3 src/run_local_server.py
    ```
 
 5. Open the local address printed in the terminal.
@@ -122,12 +109,12 @@ No build step is required.
 
 ### macOS
 
-1. Download or clone the kit and place it in a folder you can access easily.
+1. Download or clone the repository and place it in a folder you can access easily.
 2. Open **Terminal**.
-3. Move into the kit directory, for example:
+3. Move into the repository directory, for example:
 
    ```bash
-   cd /path/to/codeprobe_browser_v2_course_kit
+   cd /path/to/codeprobe_browser_v2_public_repo
    ```
 
 4. Check that Python 3 is present:
@@ -139,7 +126,7 @@ No build step is required.
 5. Start the local helper server:
 
    ```bash
-   python3 run_local_server.py
+   python3 src/run_local_server.py
    ```
 
 6. Open the printed local address in your browser.
@@ -148,28 +135,29 @@ No build step is required.
 
 ## Direct opening without a local server
 
-You can also open `index.html` directly from the file system. Some browsers block relative file loading for local files. If that happens:
+You can also open `src/index.html` directly from the file system. Some browsers block relative file loading for local files. If that happens:
 
-1. open `index.html`
+1. open `src/index.html`
 2. wait for the page to show the **Load engine file** button
 3. click **Load engine file**
-4. select the bundled `engine.py`
+4. select the bundled `src/engine.py`
 5. continue normally
 
 The local server remains the more reliable method.
 
 ## Step-by-step analysis workflow
 
-1. Start the kit with the local server or open `index.html` directly.
+1. Start the kit with the local server or open `src/index.html` directly.
 2. Paste code into the editor, drag a file onto the editor or click **Open file**.
 3. Load only the files the student actually authored.
 4. Leave **Language** on **Auto** or select the language explicitly.
-5. Click **Analyse**.
-6. Read the **Overall score**, **Verdict** and, where applicable, **Low-Level Quality**.
-7. Inspect the detailed metrics, warnings and notes.
-8. If the result is above **60%**, revise the code and run the analysis again.
-9. Export the text or JSON report if the module requires a record.
-10. If your course policy asks for disclosure, complete `STUDENT_DISCLOSURE_TEMPLATE.md` and submit it with the project.
+5. Read the **Course use policy** panel before running the first analysis.
+6. Click **Analyse**.
+7. Read the **Overall score**, **Verdict** and, where applicable, **Low-Level Quality**.
+8. Inspect the detailed metrics, warnings and notes.
+9. If the result is above **60%**, revise the code and run the analysis again.
+10. Export the text or JSON report if the module requires a record.
+11. If your course policy asks for disclosure, complete `STUDENT_DISCLOSURE_TEMPLATE.md` and submit it with the project.
 
 ## Supported languages
 
@@ -208,14 +196,17 @@ A practical layout is:
 ```text
 course-project/
 ├── codeprobe/
-│   ├── index.html
-│   ├── engine.py
-│   ├── run_local_server.py
-│   ├── README.md
+│   ├── .codeprobeignore.example
 │   ├── COURSE_INTEGRATION.md
 │   ├── PROJECT_KIT_NOTICE.md
+│   ├── README.md
 │   ├── STUDENT_DISCLOSURE_TEMPLATE.md
-│   └── .codeprobeignore.example
+│   ├── docs/
+│   │   └── codeprobe-interface-preview.png
+│   └── src/
+│       ├── engine.py
+│       ├── index.html
+│       └── run_local_server.py
 ├── src/
 ├── docs/
 └── README.md
@@ -243,6 +234,10 @@ The only required network dependency is the Pyodide runtime loaded from the offi
 - Small files, generated boilerplate and strongly templated assignments can distort results.
 - A low score does not prove independent work and a high score does not prove misconduct.
 
+## Licence
+
+This repository edition includes an MIT licence in `LICENSE`. Review it against your institutional policy before public release if you need a different licence model.
+
 ## Suggested short policy text for a module handbook
 
 > Students must run the bundled CodeProbe kit locally on the code they authored for the project before submission. The reported AI-assistance suspicion score is a formative signal, not proof of misconduct. A result above 60% requires code revision and, where requested, a short disclosure describing any AI assistance, what was retained, what was rewritten and how correctness was validated. Final academic judgement, where needed, will be based on the CodeProbe report together with repository history, intermediate commits, design notes and an oral code walkthrough. Starter code, third-party libraries, generated files, minified assets and documentation must be excluded from the check.
@@ -268,7 +263,3 @@ The only required network dependency is the Pyodide runtime loaded from the offi
 | Krsul, I., & Spafford, E. H. (1997). Authorship analysis: identifying the author of a program. *Computers & Security, 16*(3), 233–257. | https://doi.org/10.1016/S0167-4048(97)00005-9 |
 | McCabe, T. J. (1976). A complexity measure. *IEEE Transactions on Software Engineering, SE-2*(4), 308–320. | https://doi.org/10.1109/TSE.1976.233837 |
 | Poletto, M., & Sarkar, V. (1999). Linear scan register allocation. *ACM Transactions on Programming Languages and Systems, 21*(5), 895–913. | https://doi.org/10.1145/330249.330250 |
-
-## Licence and maintenance
-
-No licence file is bundled by default in this package. If you publish the kit on GitHub, add a licence that matches your intended use and institution policy.
