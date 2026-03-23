@@ -1,0 +1,55 @@
+# CodeProbe manual exclusion guide
+#
+# This file is provided as a practical checklist for students and lecturers.
+# The current browser kit does not parse it automatically.
+# Use it to decide what should be left out of a self-check.
+
+# Starter or framework code
+starter/
+scaffold/
+template/
+
+# Third-party dependencies
+node_modules/
+vendor/
+third_party/
+external/
+packages/
+
+# Build output and generated artefacts
+build/
+dist/
+out/
+obj/
+bin/
+coverage/
+*.class
+*.o
+*.obj
+*.dll
+*.exe
+*.min.js
+*.map
+
+# Generated documentation or site output
+site/
+public/
+_docs/
+
+# Version-control or tool metadata
+.git/
+.idea/
+.vscode/
+
+# Documentation and assets
+README.md
+docs/
+assets/
+images/
+
+# Uncomment if tests are not part of the assessed student work
+# tests/
+# test/
+
+# Uncomment if notebooks are not part of the assessed student work
+# *.ipynb
